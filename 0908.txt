@@ -1,0 +1,55 @@
+-배운것-
+
+
+
+
+*함수형 setState (비동기형식)를 이벤트함수안에 넣고 e를 받으려면 e를 비동기함수형setState 바깥에서 한번 변수에 저장해줘야한다.
+안그러면 에러뜸. ("this synthetic event is reused for performance reasons.)
+
+(ex)
+onSubmit = () => {
+    e.preventDefault();
+    this.setState((prevState) => {
+      return { todo: [...prevState.todo, e.target.value] }; ==> 여기서 에러발생
+    });
+  };
+
+해결 : 
+ 
+onSubmit = () => {
+const value = e.target.value;   ==> 비동기함수 외부에 변수 저장해줘야함. 
+    e.preventDefault();
+    this.setState((prevState) => {
+      return { todo: [...prevState.todo, e.target.value] }; ==> 
+    });
+  };
+
+This happened because the event implicitly passed to onItemClick is used in an asynchronous context.
+As Andre Lemay said, you should assign your needs to local variables and reference them.
+
+In my case, I had this code:
+
+
+
+*참조관계 : 속성을 바꿔주면 참조관계가 깨진다.
+
+var arr1 = [1,2,3];
+
+var obj = {
+  value : "hello",
+  value2 : "bye",
+};
+
+var a = [...arr1,obj.value];
+console.log(a);     --> 'hello'
+
+obj.value = "hello again";
+
+console.log(a);     --> 'hello'
+
+shouldComponentUpdate 
+
+:
+
+
+-질문

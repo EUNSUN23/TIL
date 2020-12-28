@@ -1,0 +1,29 @@
+-배운것-
+
+에러메세지 obj로 만들어놓기:
+
+(ex: {title:제목을 입력해주세요} )
+
+--> 다국어버전 웹 만들때에도 좋음. 
+
+form구조도 컴포넌트로 만들기. id/pw 안의 속성은 props로 주고. 
+
+FormData() --> 
+
+
+const formdata = new fORMdATA();
+
+formdata.append('dfd', credentials);
+
+--> html쓰지 않고 전송. 
+
+data-dismiss : data- : html5에서쓰는 속성표기법. css랑 상관없이 자바스크립트용도로 사용하려고
+씀. 의미는 딱히 없음. ]
+
+
+gitlab 깃허브에 내 소스 저장하기. linked in-> 외국재택근무?  
+
+console.dir(객체) --> 객체내부 자세한 것 까지 콘솔창에서 볼 수 있음. 
+
+
+

@@ -1,0 +1,93 @@
+TIL
+
+1. context API , useContext
+
+1) context : 전역에서 사용가능한 자바스크립트 객체(정확하게는 코더가 사용가능 범주를 설정할 수 있다.). 어느
+컴포넌트에든지 props로 내려줄 수 있다. 
+
+*기술적으로 꼭 객체가 아니어도 된다. (배열, 문자열, 숫자 등 모두 context value로 사용 가능)
+
+ex)
+
+context > auth-context.js 
+
+import React from 'react';
+
+const authContext = React.createContext({ authenticated:false, login: ()=>{} }); // 초기값. auto completion을 위해서 작성.
+
+
+export default authContext;
+
+
+2) 필요한 state를 context에 넣기 >> 위의 authContext를 import 해서 다른 컴포넌트를 감싸준다. 
+
+ex)
+
+<AuthContext.Provider value = {{ authenticated: this.state.isAuthenticated, login: this.loginHandler }}>컴포넌트</AuthContext.Provider>
+
+
+--> Provider는 value props를 가진다. 이 안에 필요한 state를 넣어주기. ( context object가
+바뀐다고 해서 그 자체로 rendering이 일어나지는 않으므로 state값을 value로 써야 한다. )
+
+
+
+3) 다른 컴포넌트에서 context 값 사용하기 
+
+* Consumer는 jsx코드를 자식으로 갖지 않고, 함수를 자식으로 갖는다. 고로 자식으로는 
+jsx 코드를 return하는 함수를 써준다. (Consumer는 자식으로 갖는 함수를 실행시키는 역할)
+
+ex)
+
+<AuthContext.Consumer>{(context)=>{ return 컴포넌트 }}</AuthContext.Consumer>
+
+
+2. useMemo
+
+- 불필요한 re-render cycle 제거하기 (사실 작은 app에서는 안 쓰는게 더 낫다)
+
+: 예를 들면 함수형 컴포넌트 특성상 렌더될때마다 method들이 새롭게 생성되는데,
+이것을 방지함. 
+
+
+==> 부모컴포넌트가 새로 렌더링 될 때 React.memo로 감싼 자식 컴포넌트에 
+함수를 props로 넘겨주면 부모컴포넌트 렌더링될때 이 함수도 계속 새로 생성되므로
+React.memo가 이것을 변화라고 감지하고 자식 컴포넌트를 렌더링하는 수가 있음.
+그래서 부모 컴포넌트에서 이 props로 넘기는 함수를 useCallback으로 묶음. 
+
+* useMemo vs useCallback
+
+useCallback : 함수가 새롭게 생성되지 않도록 막는다. 
+
+useMemo :  컴포넌트가 렌더링되어도 특정 value가 업데이트 되지 않게 막는다. 
+
+==> 컴포넌트에도 적용할 수 있음. (어떤 종류의 data도 적용할 수 있음)
+
+
+3. custom hook
+
+- 일반 유틸리티 함수와 달리 state를 변화시킬 수 있다는 점에서 유용함. 
+(이 커스텀훅 안에 state가 따로 있고 이 state를 컴포넌트에 사용하기 때문에)
+- hooks 폴더에 따로 파일로 분리해놓지만, 특정 컴포넌트 내부에서 동작하는
+hook인것처럼 동작한다(컴포넌트가 이 hook의 snapshot을 사용함)
+- 일반적인 자스 함수이지만 react 기능으로 특별하게 동작한다. 
+- 커스텀 훅 안에서는 모든 종류의 hook을 쓸 수 있다. 
+- 커스텀 훅은 쓰이는 컴포넌트가 렌더될때마다 같이 실행된다. (re-run. 렌더링마다
+실행되는 것을 막는 방법이 있음. )
+- 커스텀 훅은 모든 종류의 데이터를 return할 수 있다(배열, 객체, 숫자, 문자열 등등)
+- 다른 hook과 마찬가지로 root level에 써야 한다. 
+
+1. custom hook의 logic을 특정 컴포넌트 안에서 사용하기 
+
+*custom hook은 쓰이는 컴포넌트가 렌더될 때마다 '실행' 되는 함수이므로
+특정 로직만을 특정 조건상에서만 쓰고 싶다면 커스텀 훅 안에서 
+이 로직을 함수로 따로 분리하고 useCallback으로 묶어준다. 
+
+2. custom hook의 data 특정 컴포넌트 안에서 사용하기 
+ 
+
+rule )
+
+1. 커스텀 훅의 이름은 반드시 'use~' 로 시작해야한다. 
+
+
+ 

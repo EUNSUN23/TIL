@@ -1,0 +1,11 @@
+-배운것-
+*** 
+1.className 을 배열로 넣기
+
+ let attachedClasses = [styles.SideDrawer, styles.Close]; 
+
+ <div className={attachedClasses.join(" ")}> --> className은 항상 문자열이기 때문에 join쓰고, 꼭!!! 띄어쓰기 주기. 
+그래야 
+
+.SideDrawer .Close{~~~} 되기 때문에. 
+

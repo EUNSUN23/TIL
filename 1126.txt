@@ -1,0 +1,5 @@
+-배운것-
+
+htmlcollection(document.querySelector('.SearchResult').children 등)배열로 만드는 법 :
+
+const arr = Array.from(htmlcollection);

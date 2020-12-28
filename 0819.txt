@@ -1,0 +1,106 @@
+-배운것-
+
+*자바스크립트 : 테트리스게임
+
+1. 
+var blockData = {
+
+0: ['red', true, []],
+
+}; 
+
+라는 객체에 접근할 때 blockData[td][0] 이런식으로 접근할수있다. blockData.
+
+2. i += 1 과 i++은 다르다. 후위? 전위?
+
+
+
+3. 이벤트루프와 호출스택
+
+setInterval, setTimeout 등의 이벤트 메모리는 호출스택상이 아니라 백그라운드(background)에 저장된다. 백그라운드는 노드 내부엔진동작이다. 
+
+setInterval(tick, 2000); --> 백그라운드에서 2초마다 tick이라는 함수를 호출스택에 넣어준다. (실행되도록)
+
+태스크 큐 : 백그라운드에서 보낸 콜백들의 실행대기장소(콜백함수마다의 실행순서 정해줌) 
+
+- tick이 실행되는 순서 -
+백그라운드 -> 2초뒤 태스크 큐 -> 비어있으면 호출스택(이벤트루프)
+
+*이벤트마다 다른 태스크 큐에 들어감. 이벤트루프는 각 태스크큐를 우선순위에 따라 호출스택으로 올려보냄.
+
+호출스택, 백그라운드, 태스크큐를 그려보면 비동기함수들의 실행순서를 파악할 수 있다.
+
+
+4. const, let, 최신스타일(?) 함수선언
+
+const : 재할당불가능, 블록스코프  // but 안에 elements를 추가하는건 가능하다.
+
+let : 재할당가능, 블록스코프
+
+const 함수명 = () => {}; 이렇게 선언한다. 
+
+함수 안에 return만 있는 경우, 
+
+const 함수명 = () => 리턴값; 이렇게 줄여쓸 수 있다. 
+function 함수명() {} 도 여전히 쓰임. 
+
+인자값이 하나인 경우 괄호도 생략할 수 있다.
+
+
+5. 보통시작할 때는 init(initiate 의 줄임말)을 많이 쓴다. 
+
+---> 둘은 this가 다르다. // 제로초 블로그에서 자바스크립트랑 ecma스크립트 강좌 찾아보기. 
+
+6. Array/Object 스프레드 (자매품rest)
+ 
+[..Array(숫자).keys()].forEach(~~);
+
+...[1,2,3] -> 1,2,3
+
+function(..[1,2,3]){} --> function(1,2,3){}
+
+..Array(숫자).keys().map((v)=>v+1)
+
+7. 이차원배열, 데이터와 화면 일치시키기 꼭 알아두기. 이차원배열은 실무에서 많이쓰임.
+
+-질문-
+
+
+
+const a = [5,10,10,5,3,20,1];
+const b = [];
+
+while(a.length >= 0){
+b.push(a.shift());
+a.forEach((d, i) => {
+if(b[0]>=d){
+  b.push(d);
+}else{
+  return;
+}
+});
+console.log(b);
+}
+
+
+const a = [5,10,10,5,3,20,1];
+const b = [];
+let flag;
+
+while(a.length >= 0){
+  
+b.push(a.shift());
+a.forEach((d, i) => {
+  if(b[0] >= d ){
+    flag = false;
+  }else{
+    flag = true;
+  }
+  if(!flag){
+    b.push(d);
+}else{
+  console.log('not the same');
+}
+  });
+
+}

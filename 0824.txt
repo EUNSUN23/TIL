@@ -1,0 +1,30 @@
+-배운것- 
+
+리액트는 태그를 직접 만들어서 reactDom으로 하나의 root태그 안에 넣어주는것. 웹보다 앱의 형태에 가깝다.
+기본적으로 root 가 하나 필요하다. 
+
+
+****리액트에서 가변적인  부분(화면상에서)데이터는 state다. (객체임- 키:속성)state에 따라 화면을 자동으로 바꿔준다. 
+(바닐라자바스크립트로는 개발자가 일일이 화면과 데이터를 연결해주었어야 했다.)
+변하는 부분은 다 state로 만든다고 생각하면 됨. 
+
+바벨(babel)은 자바스크립트 안에서 html을 비롯해 실험적인 문법들을 쓰게 해 준다.
+
+JSX = JS + XML / HTML보다 문법이 엄격함. 닫는 괄호(/)꼭해줘야함.
+
+콘텐트 안에 중괄호{}를 넣어주면 안에 자바스크립트를 쓸 수 있다. 그러나 가급적 jsx와 html 섞어쓰지 말고,
+클래스의 메소드로 넣을것.
+
+
+리액트
+
+-질문-
+appendChild 는 자바스크립트로 만든걸 html에 append해준다. html 태그로 감싸지 않은 것도 append해준다. 
+appendChild는 정확히 뭘 append 해주는건지?
+
+function paintImage(imgNumber) {
+  const image = new Image();
+  img.src = `/bgimg/${imgNumber}.jpg`;
+  img.classList.add("bgimg");
+  body.appendChild(image);
+}

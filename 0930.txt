@@ -1,0 +1,98 @@
+-배운것-
+
+1. 재귀, 비동기와 호출스택
+
+
+2. storing the order and getting order using server. (burgerbuilder)
+
+firebase : 
+it is eseentially out of the box working backend which includes a database. (offered by google, free of charge)
+you don't have to write any server side code. But the way you communicate with firebase is the same you communicate
+with any other backend.
+we're going to use the database because we want to store data and firebase has this syntax where the
+API endpoints are directly mapped to endpoints or to tables in your database.
+we're not directly connecting to the backend. 
+we're just sending HTTP request and firebase is doing the mapping of HTTP endpoints to the database.
+몽고 DB같은 구조를 사용한다. (json like nested structure) --> .post('')로 노드를 만들고, 그 노드 안에
+받은 데이터를 저장한다. 
+
+axios.post('/orders.json');  --> orders 라는 노드를 만들고, 데이터 저장함. (json반드시 써줄것)
+
+
+<Displaying a spinner while sending a request>
+spinner 컴포넌트 따로 만들고, (google에 css spinner 검색) if문으로 실행조건문 만들기. 
+
+<Handling errors - 에러창 만들기 > 
+
+*errorHandler 컴포넌트 만들고,  error메세지 적용시키고 싶은 컴포넌트 wrap해주기.
+--> componentDidMount, axios.interceptors.request.use() / axios.interceptros.response.use()
+
+(ex: export default withErrorHandler(BurgerBuilder, axios); )
+
+<Retrieving Data from the Backend // getting the data dynamically from the Backend>
+
+1. 
+firebase의 database에서 node를 추가한다(ingredients)
+
+
+2. node에 데이터를 입력한다(key-value pair여야 함)
+
+3. node의 endpoint 복사. (리액트 상에서는 json붙여야 접근가능함) 
+
+**새 data를 fetch하는데에는 componentDidMount. 
+
+4. axios.get('endpoint.js')~
+
+***새로 비동기로 fetch되는 data로 화면이 구성될 경우에는, 렌더링에 if문으로 데이터가 있을 경우에만 
+렌더링하도록하기. 
+
+
+
+*** 자바스크립트 변수에 jsx값 할당할 경우 jsx코드를 <></>로 wrap해주거나  배열로 만들어주기. 
+(when having jsx adjacent element?)
+
+
+***주의 : componentDidMount는 해당 컴포넌트의 childcomponent가 모두 render된 이후에 발생한다. 
+따라서 childcomponent의 componentdidMount가 실행된 이후에 (즉 그 안의 axios.get~통해서 데이터가 fetch
+된 이후에, get 통신이 완료된 이후에) withErrorHandler의 에러처리가 실행되기 때문에 get 의 통신에러는 
+잡아내지 못한다. 
+
+--> withErrorHandler의 에러처리를 childcomponent가 렌더되기 전에 해야한다. componentWillMount 가 삭제되었기 때문ㅇ
+constructor를 쓰라고 하는데..  
+
+---> 
+
+-질문-
+
+1. 
+
+var numbers = [1,1,1,1,1];
+var target = 3; 
+
+dfs(0, 0);
+
+    function dfs(index, sum) {
+      if (index === numbers.length) {
+        if (sum === target) {
+          answer++;
+        }
+        return;
+      }
+
+      dfs(index + 1, sum + numbers[index]); --> 함수1
+      dfs(index + 1, sum - numbers[index]); --> 함수2
+    }
+
+    return answer;
+  }
+
+에서, 함수1이 다 끝나고(index가 5가되었음) return 다하고, 스택에서 index = 5, sum = 5 인것을 없앴을 때
+(index = 4, sum =4 남아있는 상태)
+
+여기서 함수를 마저 다 안 빼고 함수 2를 실행하는 이유는?
+
+*다음함수 실행할 때, 바로 전에 스택에 쌓여있던 함수를 하나 빼고 함수를 실행한다. 
+
+2. *endpoint : url 같은것?
+
+3. database > dataParent > dataChild --> endpoint로 접근못하는지? 

@@ -1,0 +1,28 @@
+-배운것-
+
+<port에서 running하고 있는 process 종료하는 법>
+
+Open Windows Terminal.
+netstat -ano | findstr :PORT.
+Type following to kill the process. kill PID.
+
+taskkill /PID <PID> /F
+-------------------------------------
+<readme>
+
+##Week 1
+
+#####*미디어쿼리로 grid item 조절
+
+
+ 
+#####*다크모드 세팅
+<setAttribute>
+document.getElementsByTagName("H1")[0].setAttribute("class", "democlass");
+
+-------------------------------------
+
+
+
+
+-질문-

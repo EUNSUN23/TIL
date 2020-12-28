@@ -1,0 +1,168 @@
+-배운것-
+
+<183. Handeling errors>
+componentDidMount안에 axios와 같이 비동기로 작동하는 동작이 있으면 렌더할 때 if문을 넣어서
+비동기 완료 되면 렌더하도록 하기.
+
+
+2.
+<Removing old interceptors>
+-componentWillUnMount-
+interceptor를 호출해주는 withErrorHandler가 감싸고 있는 page가 한개 이상일 경우,  다른 페이지를 렌더링할때도 여전히 
+그 전 페이지의 interceptor가 남아있다. 그래서 지워줘야 할 필요가 있다. 메모리 누수가 있을수도 있고, 기타 에러 발생할수도 잇음.
+
+componentWillUnMount() {
+      axios.interceptors.request.eject(this.reqInterceptor);
+      axios.interceptors.request.eject(this.resInterceptor);
+    }
+
+
+<188. Routing and SPAs>
+
+* What is routing about?
+Idea behind a singple page application is to have a single page, a single html file. With a single page, we still 
+want to provide the user with a normal web using experience though, we want to show the user different 
+pages for different URLs. 
+We don't actually have multiple html files, but then we instead use javascript to render different pages for different paths.
+So we don't really have different files but simply we re-render parts off that single page or maybe
+the entire single page depending on which path the user navigated to in our application. This is what 
+routing is about, parsing this path, so the path after our domain and showing the appropriate jsx or component
+code in our app. 
+
+1. install routner pacakage. (we don't have to parse that parse on our own.) 
+
+-parse the url 
+-read our configuration 
+
+<190. Setting Up the router package>
+
+
+1. routing 하기
+- router 패키지 설치
+
+: npm install --save react-router react-router-dom
+
+- App.js 혹은 index.js파일에 <BrowserRouter> import 하기
+
+- BrowserRouter로 전체 감싸기 --> BrowserRouter가 이 앱의 router임. BrowserRouter로 감싸인 곳 어디서나
+router 기능 사용가능. 
+ 
+2. url로 연결하고 싶은 컴포넌트들 따로 폴더화해서 container안에 정리해주기(이제 root leve이기 때문에)
+
+<191. Setting up and rendering routes>
+
+1. render 속성
+
+<Route path = "/" exact render = {()=>{ <h1>Home</h1> }}/>
+
+*exact: boolean props.(default는 true)
+--> exact 없이 path = "/"만 쓰면 prefix임(url이 "/"로만 시작하면 된다. 모든 
+url이 /로 시작하므로 모든 경로에 적용됨). 
+
+--> exact 쓰면)) active path가 / 이면 render안의 함수를 실행한다. --> h1태그가 <Route>태그 자리를 대신함.
+
+2. component 속성
+
+<Route path="/" exact component={Posts} />
+
+<195. Switching between pages>
+A reloading application means that your javascript code is starting anew and therefore all previous application state is lost.
+as long as the user is navigating around in it, you want to not reload the page. you want to just re-render the page in the 
+parts where it needs to be re-rendered to look like a new page. 
+
+
+<196. Using Links to Switch Pages>
+처음 전체 페이지 들어갈때만 reload 일어나고, 페이지 안의 link 클릭할 때는 reload 하지 않는법.
+
+1. a 태그 대신 Link 속성 이용하기 (router전용)
+
+import {Route, Link} from 'react-router-dom';
+
+ <li><Link to ="/">Home</Link></li>
+ <li><Link
+                  to={{
+                    pathname: "/new-post",
+                    hash: "#submit",
+                    search: "?quick-submit=true",
+                  }}
+                >
+                  New Post
+                </Link></li>
+
+*to 는 a태그의 href 같이 경로 설정함. 단순 문자열로 쓸 수도 있고, {}를 사용해서 자바스크립트코드로 쓸 수도 있음.
+*hash: this would allow us to then jump to any ID "submit" we have in that elements, so 
+using that feature of appending a fragment of the URL, you might be aware of that, you can simply add
+hash something after the URL to jump to that point. 
+
+*search : query-params를 받는다. 
+
+
+<197. Using Routing-Related Props>
+
+1. Route에 관한 정보는 props로 담겨서 확인가능하다. 
+
+-history, location, match
+
+location : >search, hash등 있음
+
+history : action> push - to push a new page programmatically without needing a Link component. 
+match : information about the matched route. 
+
+ -isExact : path를 prefix로 둔 경우에, Route의 속성으로 exact를 따로 설정하지 않아도 검사해보면 isExact가 true로 뜬다. 
+브라우저상에서 임의로 조작한 path에서는 false로 뜬다. 
+
+<198. "withRouter" HOC & Route Props>
+what if we actually want to get this information not in one of our containers, so not in a component which was loaded 
+through route but in a component which is rendered as part of such a container?
+
+1) 스프레드 연산자 사용해서 route props를 자녀에게 넘겨주기
+
+<Post {...this.props} />
+
+
+2) withRouter 라는 hoc 컴포넌트로 감싸주기
+
+import {withRouter} from "react-router-dom';
+
+export default withRouter(post);
+
+
+<199. absolute path vs relative path>
+
+Absolute path : it is always appended in your domain. so if you're serving this app from example.com then you 
+want to go to new-post, if you navigate to /new-post, that means always attach /new-post right after the domain. 
+Even if you previously were at "example.com/posts", you wouldn't add new-post at the end of that, turning it  to
+"example.com/posts/new-post" but turning it into "example.com/new-post"
+
+*router의 link설정에서는 기본으로 absolute path이다.  그래서 router의 link는 항상 root domain에 append되어있다. 
+
+--> relative path로 바꿔서, link가 바로 현재 path에 속해있게 하고 싶으면 match.url 속성이용해서 경로를 dynamic하게 설정하기. 
+
+match.url : curretnly loaded path를 나타낸다,6fg
+
+<Link to = {{ pathname: this.props.match.url + '/new-post' }}>Home</Link>
+
+
+
+
+
+
+
+
+
+
+
+-질문-
+
+
+-기타-
+
+<Handling errors(183)>
+
+App.js의 자식 컴포넌트인 BurgerBuilder.js의 componentDidMount에서 일어나는 ajax통신 에러를
+글로벌하게 다루려면 컴포넌트 렌더링이 일어나기 전에 에러핸들링을 해야하는데
+동영상에서 쓰는 componentWillMount가 지금은 삭제되고 없음. constructor를 쓰라고 하는데 
+어떻게 쓰는지 모름.
+
+<setting up links>
+

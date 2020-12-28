@@ -1,0 +1,147 @@
+-리액트- 
+
+배운것 : html 파일 안에 리액트코딩하기 
+
+1. tip)
+
+리액트 컴포넌트 감싸는 <></> --> 바벨 // <React.Fragment></React.Fragment> --> 바벨 없으면.
+
+form 있는 경우에는 onSubmit, 없는 경우에는 버튼에다가 Onclick.
+
+constructor, super, this 빼도 무방(실무에선 거의 빼고 쓴다.)
+
+메소드를 따로 빼내었을 때에는 무조건 화살표함수로. function으로 하면 this가 달라짐.
+
+2. 함수형 setState)
+'전'state값을 이용한 새 state를 만들 떄에는 return 함수를 활용하자.* 
+
+this.setState{
+                value : this.state.value + 1
+            }
+            this.setState{
+                value : this.state.value + 1
+            }
+            this.setState{
+                value : this.state.value + 1
+            }
+ --> setState는 비동기함수이기때문에 this.state.value 가 의도처럼 '바로 전 state'가 아니게 된다. 
+그래서 매개변수가 'prevState'인 리턴함수하나를 더 넣어준다. 
+
+this.setState
+
+3. ref
+
+document등으로 화면을 직접 컨트롤 x. 리액트 기능 활용해준다. 
+
+4. 
+//setState할 때에는 render함수가 실행된다. render를 너무 많이하면 속도가 느려짐.
+
+함수를 따로 빼주는 이유는 렌더할때마다 새로 생성되는 낭비 막기 위해서.\
+
+
+5. React Hooks 
+
+함수형 컴포넌트안에도 setState와 ref를 사용할수 있게끔 하기 위해 만들어짐. 
+*리액트에서 이제는 hooks쓰라고 장려하고있음.
+
+함수형 컴포넌트 ex) const GUGUDAN = ( ) => return <div>hello</div>    ...setState가 필요없을 때 class아닌 함수형 컴포넌트 사용했음.
+
+class에서 객체로 묶어줬던 것들을 개별적으로 풀어준다. (비구조화 할당으로)
+
+*state가 바뀔 때 마다 함수부분 (return전에 쓴 부분)이 다시 실행되어서 class보다 속도가 좀더 느릴 수 있다.
+(class에서는 render함수만 재실행되었었음)  
+
+--> 단 setState한번 할 때마다 rendering +1 이 아니라, setState를 모아서 렌더링 한번으로 처리함. setState가 비동기함수인 이유.
+
+6. 리액트에서 바꿔써야 하는 단어
+html태그에 id, class 붙일때 id, className
+for -> htmlFor
+
+-끝말잇기-
+7. 웹팩 
+*made by 소크라
+*여러개의 자바스크립트 파일을 합쳐서 하나의 파일로 만들어준다.(웹팩을 쓰는 이유 : 컴포넌트가 몇백개 되면... 유지보수가 안됨.)
+
+웹팩을 알려면 node를 알아야함. (node는 서버 아님. 자바스크립트 실행기일뿐)
+
+*실행하고있는 폴더로 들어와서 터미널 실행. npm init -> author -> 내이름 license -> ISC 혹은 MIT -> yes 
+-> package.json 생성 // 여기에 리액트 개발에 필요한 패키지 넣어주면 됨.
+
+제일먼저 필요한것 : React, React Dom  // npm i react react-dom
+
+리액트할 때 필요한 웹팩 설치 : npm i -D webpack webpack-cli
+
+*-D
+(실제 서비스할때는 webpack필요없고, 개발할 때만 필요함. 개발용으로만 webpack쓸거라는 뜻)
+
+*package.json에서 실제 서비스에 쓰이는 것들은 dependencies에, 개발할 때 쓰이는 것들은 devdependencies 에 저장됨.
+
+
+8. 웹팩으로 build하기
+터미널에서 특정단어를 명령어로 사용하려면 명령어 등록이 필요하다. 
+webpack 의 경우 명령어 등록을 해주거나, 아님 package.json의 script에 직접 써주거나, npx webpack하거나.
+
+"scripts": {
+    "dev": "webpack"
+  },
+
+--> npm run dev 하면 webpack이 실행됨. (엔트리 읽어서 output으로 냄)
+
+wordrelay.js 파일 텍스트 수정하고나서 npm run dev한번 더 해주기 (왜인지는 모름)
+
+--------------------webpackg.config.js & client.jsx 파일------------------------------------------------------
+
+//웹팩은 webpack.config로 작동함. (webpack.config파일)
+const path = require("path"); //node가 경로조작 편하게 하도록 주는 설정 가져오기.node깔려있어야.
+
+module.exports = {
+  name: "wordrelay",
+  mode: "development", //실서비스에서는 production으로 바꾸기.
+  devtool: "eval",
+  resolve: {
+    extensions: [".js", ".jsx"],
+  },
+  //entry랑 output이 제일중요. 파일 하나로 합쳐줌.
+  entry: {
+    app: ["./client"], //client.jsx가 wordrelay도 불러오고 있으므로 또 넣을필요없음. 확장자도 안넣어도(reslove에 입력해둠).
+    //입력
+  },
+
+module :{ ~~~~ } --> 일단 presets부터 넣고 실행시켜보고, 에러떠서 plugin추가하라고 하면 추가하기. 
+  output: {
+    //출력
+    path: path.join(__dirname /*현재폴더*/, "dist"), //현재폴더 안에 dist를 자동으로 만들어줌.
+    filename: "app.js",
+  },
+};
+
+<client.jsx파일>
+const React = require("react");
+const ReactDom = require("react-dom");
+//내부에 JSX문법을 쓰면 JSX확장자를 써주자.
+
+/*
+class WordRelay extends React.Component {
+    state = {};
+    render(){
+
+    }
+} 아예 클라이언트 파일에 이렇게 써도 됨. 하지만 컴포넌트가 많아지면 유지보수가 안되기 때문에 컴포넌트들을 분리해주는것임.*/
+const WordRelay = require("./WordRelay");
+ReactDom.render(<WordRelay />, document.querySelector("#root"));
+
+//파일이 2만개 있으면 그 중에 필요한 파일만 불러와서 한 파일로 합칠 수 있음.
+
+--------------------------------------------------------------------------------------------------------------------------
+
+웹팩에도 바벨을 깔아줘야 jsx문법 해석할수있음. 참고로 바벨도 개발용에서만 쓰임. 
+
+npm i -D @babel/core @babel/preset-env @babel/preset-react babel-loader
+
+@babel/core : 바벨 기본세팅
+@babel/preset-env : 사용자의 브라우저에 맞춰서 최신문법을 옛날문법으로 지원
+@babel/preset-react : jsx지원
+babel-loader : 바벨이랑 웹팩이랑 연결해줌
+**cmd에서 띄어쓰기는 (and)의 의미임. 한꺼번에 여러개 설치.
+
+질문 : wordrelay.js 파일 텍스트 수정하고나서 npm run dev한번 더 해주기 (왜인지는 모름)
