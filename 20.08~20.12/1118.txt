@@ -1,0 +1,8 @@
+-배운것-
+
+<css>
+
+how to use css object fit to control your images : 
+
+
+<javascript module (ecma6문법) 왜 사용하는지, 어떤건지 정리하기. >

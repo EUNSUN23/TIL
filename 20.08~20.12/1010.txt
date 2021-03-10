@@ -1,0 +1,192 @@
+-배운것-
+
+<208. Understanding nested routing>
+
+1. 부모로부터 현재 path 전달받기 : this.props.match
+
+(ex)
+<Route path={this.props.match.url + "/:id"} component={FullPost} />
+
+
+<209. Creating Dynamic Nested Routes>
+
+The react router behind the scenes doesn't replace the component all the time.
+If you're loading a component on which you're already on, like we are here, 
+it won't re-render the whole component. --> componentDidMount 실행 안돼고, 내용물도 안바뀜.
+
+-> Fullpost 에 componentDidUpdate 추가하기. 
+
+
+<210. Redirecting the user>
+
+Sometimes you want to redirect the user. For example, let's say that you also want to lead the user to 
+/posts if he visits just slash. Of course you can duplicate that route and also handle the slash case here,
+(Switch로 라우터들이 묶여있을 경우에 같은 경로 복사해서 redirecting하는게 가능함)
+
+-Redirect 
+
+it is a component simply used in your jsx code, there you can add it to your switch statement and then you
+specify a 'from'property, so from which route you want to navigate to which. 
+If you use it outside the Switch statement, 'from' can't be specified. then you can just 
+always redirect to switch "/posts" and not respect the path you're navigating too. 
+
+
+import {Redirect} from 'react-router-dom'
+
+ <Switch>
+          <Route path="/new-post" component={Newpost} />
+          <Route path="/posts/" component={Posts} />
+          <Redirect from ="/" to = "/posts"/>
+          
+        </Switch>
+
+
+<211. Conditional Redirects>
+
+//NewPost 에서 새 포스트를 서버에 submit 한 후 'posts' 링크로  redirect하기. 
+
+import {Redirect} from 'react-router-dom';
+
+render() {
+    let redirect = null;
+    if(this.state.submitted){
+      redirect = <Redirect to = "/posts"/>
+    }
+    return (
+      <div className="NewPost">
+        {redirect}
+        <h1>Add a Post</h1>
+
+<212. Using the History Prop to Redirect>
+
+The way we redirect in the NewPost component is maybe not the way you're always going to do that.
+
+In the end, after submitting a post successfully, you just want to switch the page, and for that 
+you can of course also use that history prop which you get on every component which is loaded in 
+the BrowserRouter wrapped component. In there, we have access to that match location and history prop.
+
+And history prop has a couple of convenient methods we can use for replacing 
+the current route or pushing a new route.
+
+(ex)
+
+axios.post("/posts", post, {}).then((response) => {
+      console.log(response);
+      this.props.history.push('/posts');
+    }, []);
+
+
+- redirecting by 'Redirect' component  VS redirecting by 'props.history.push'
+
+: 'Redirect' component replaces the current page on a stack. So if you press back-button, you can go back 
+but you won't go back to the last page.
+
+If you push a new path, then you simply have one additional page on a stack, so you can go back to the last 
+page if you press back-button. 
+
+*history.replace : it basically does the same as redirecting and therefore you can use it as an alternative. 
+
+
+<213. Working with Guards>
+-Guard 개념 이해-
+Guard is for example used when you don't know whether the user is authenticated or not and there are some path in 
+your application, some routes you only want to allow the user to visit if he is authenticated.
+With the react router, you might need to have think about these guards in a new way. 
+
+
+ render() {
+   
+    let redirect = null;
+    if(this.state.submitted){
+      redirect = <Redirect to = "/posts"/>
+    }
+    return (
+      <div className="NewPost">
+        {redirect}
+        <h1>Add a Post</h1>
+
+--> 이런식으로 state 확인하는 if문 만들어서 특정조건에서만 해당 페이지에 접근하게끔하는것이 일종의 guard임. 
+
+혹은, gaurd할 컴포넌트 안에 componentDidMount를 두고 특정조건 만족하는지 조건문쓸수도있음.
+
+
+<214. Handling the 404 Case(Unknown Routes)>
+
+In Route component, you can simply define a 'component' or the 'render' method to render something
+for any unknown route.  
+(Of course you could use 'component' and render 404 error page component you created. But this route
+will catch any routes which are not handled prior to it. So any unknown routes in our case and it will output this.)
+
+this is a nice catch which should always come last and show an appropriate page or render
+some dummy content for unknown routes
+
+**It won't work together if you redirect from '/', if you redirect from any other page than '/', 
+it will work though, so you can use them together.  
+ 
+
+
+(ex)
+ <Switch>
+          {this.state.auth ? <Route path="/new-post" component={Newpost} />}
+          <Route path="/posts/" component={Posts} />
+          <Route render = {()=><h1>Not found</h1>}/>
+          {/*<Redirect from ="/" to = "/posts"/>*/}
+          
+        </Switch>
+
+
+<215. Loading Routes Lazily>
+
+개발자도구>network> bundle.js 주목. /개발자모드에서는 메모리 차지하는 비율이 가장 크다. 나중에 내보내면 
+자동으로optimized됨. But still loading the entire bundle with all the code of our application up front can 
+be bad if we have a big application with distinct feature and distinct area in the app where
+a user might never use visit. 
+If the user never visits 'NewPost', loading the code responsible for that component doesn't make a lot of sense.
+
+{this.state.auth ? <Route path="/new-post" component={Newpost} /> : null}
+
+-->
+this should only be loaded if the user actually navigates to /newposts. Otherwise new posts and all potentail
+children are never needed. 
+It would be better to not download it and hence have a smaller upfront chunk to download and instead download
+the code responsible for this component and its children when needed. For now, this is not super-useful, but for real
+big applications you are building where this might matter where you are downloading quite a bit. 
+
+The technique of downloading only what you need is known as code splitting or lazy loading.
+
+And there you would essentially want to make sure that in your component, you're only loading the component
+once you need it. 
+
+This technique will work for react-router 4 and for create-react-app because code-splitting depends heavily on the webpack
+configuration you're using. It is advanced concept afterall.
+
+the way I'm showing you is the way it works with the config from create-react-app which is a pretty a pretty modern and good
+configuration though. 
+
+1. create a hoc folder (under the src folder)
+
+2. create asyncComponent.js (this component should help you load a component asynchronously only when it's needed)
+
+- create codes like down below -  
+(예제 필요하면 파일에서 직접 찾아서 볼것. asyncComponent.js)
+
+***important!***
+
+<Blog.js>
+
+import NewPost from './NewPost/NewPost';
+
+Now you want to render NewPost dynamically. The thing is, whenever you 're importing something like 
+this here,(import ~ from ~), you basically inform webpack, the build tool which gets used behind the scenes,
+about its dependency('./NewPost/NewPost') and it will include it in the global bundle. this is webpack's job.
+
+Now for a lazy loading, this is exactly the opposite of what we want to do. We don't want to include it in 
+the bundle. We want to load it when needed. Still webpack needs to be able to dynamically prepare some
+extra bundle for this potentially loaded code.
+
+
+
+
+
+*****The thing is 
+

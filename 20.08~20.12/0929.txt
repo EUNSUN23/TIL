@@ -1,0 +1,186 @@
+-배운것-
+
+<Fetching Data on Update(without creating infinite loop)>
+
+-axios.get 은 항상 비동기로 작동한다는것 기억하기. then안에서 setState해도
+바로 적용되지 않기 때문에, if문 사용해서 데이터가 '있을 때' 에만 이 state를 render 하게끔 해야한다. 
+
+
+2. componentDidUpdate 안에서 state 바꾸기 : infinite loop 빠지는 것 피하기 
+- if문 사용해서 특정 조건 하에서만 state 바꾸도록 하기
+
+
+<Posting data to the server>
+
+:서버에 데이터 보내는 법 
+
+ const post = {
+      title: this.state.title,
+      body: this.state.content,
+      author: this.state.author,
+    };
+    axios
+      .post("https://jsonplaceholder.typicode.com/posts", post, {})
+      .then((response) => {
+        console.log(response);
+      });
+
+
+--> 전달할 데이터는 객체형태여야 한다. / axios.post(url, 데이터).then((response) => {~~});
+
+
+<Sending a delete request to the server>
+
+axios
+      .delete("https://jsonplaceholder.typicode.com/posts/" + this.props.id)
+      .then((response) => {
+        console.log(response);
+      });
+
+
+<Handling Erros Locally>
+: request 관련 에러 다루기. 
+
+"Now since axios uses promises, we don't only have the then method we can chain but we can also add a 
+second method, simply chain it after then, the catch method, as the names suggests, this catches 
+any erros you get. "
+
+
+ axios
+      .get("https://jsonplaceholder.typicode.com/postsss") 
+      .then((response) => {
+        const posts = response.data.slice(0, 4);
+        const updatedPosts = posts.map((post) => {
+          return {
+            ...post,
+            author: "Max",
+          };
+        });
+        this.setState({ posts: updatedPosts });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({ error: true });
+      });
+
+--> 서버 통신관련에러가 발생하면 error를 캐치해서 내장함수 실행한다. (state를 바꿔주거나 해서 
+rendering되는 화면에도 영향을 미칠 수 있음)
+
+<Adding interceptors to Execute Code Globally>
+
+interceptors : these are functions you can define globally which will be executed for every request leaving your
+app and every response you're returning into it. All components, all areas of your app are covered with these. 
+This is especially useful for example for setting some common headers like authorization header maybe
+or for responses or want to handle errors globally.
+
+1. Go to index.js file (beacuse this is the most global file we have in our react app. it's the file 
+where we actually start our react app by mounting it to the dom. 
+
+2. import axios
+
+3. axios.interceptors.request.use(config => {
+console.log(config);
+//Edit request config 
+return config (항상 해줘야 함. 안하면 모든 통신을 block하는 것임.)
+
+}, error => {
+
+console.log(error);
+return Promise.reject(error);  });
+
+(Promise reject : so that we still forward it to our request as we wrote it in a component where we can 
+handle it again with the catch method, this makes sense if you have some local task you 
+want to do like showing something on the UI but also globally, you want to log it in the log file which 
+you send to a server or something like that.)
+
+global하게 에러 다뤄주는 것이 인터넷 연결이 안된다던지 해서 불가능하면, 
+그 때 interceptors 의 에러설정이 실행된다. 
+
+<handling resoponse with interceptors>
+
+axios.interceptors.response.use(
+  (response) => {
+    console.log(response);
+    return response;
+  },
+  (error) => {
+    console.log(error);
+    return Promise.reject(error);
+  }
+);
+
+*return response : so that we can also still use it in the component in the then block. This is 
+one way we should return it and we also fetch errors(console.log) and we should also reject them here
+so that we can still handle them in the catch block locally in a component. 
+
+--> browser : can see the console.log(response); and still handle eit locally. 
+
+
+<Reomoving Interceptors>
+
+You learned how to add an interceptor, getting rid of one is also easy. 
+Simply store the reference to the interceptor in a variable and call eject  with that reference as an argument, 
+to remove it (more info: https://github.com/axios/axios#interceptors):
+(변수에 interceptor를 담아서, eject의 인자로 받아준다. ) 
+var myInterceptor = axios.interceptors.request.use(function () {/*...*/});
+axios.interceptors.request.eject(myInterceptor);
+
+<Setting a default global configuration for Axios>
+
+-baseURL 설정하기 
+
+1. Go to index.js file
+
+2. import axios
+
+3. 
+
+axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com'
+
+/posts --> .com 뒤에 오는 부분인데 url 쓰는 부분들에 공통적으로 이것만 써주면 됨. 
+ 
+-common header 설정하기
+
+you can also access defaults headers and there set a common header, so on that common object of 
+authorization, common headers are simply the general headers which are set for all types 
+of requests, and there you could set this to your auth token if you had one or whatever that is.
+
+axios.defaults.headers.common['Authorization'] = 'AUTH TOKEN'
+
+You can also set headers just for specific requeset types, like for post requests only where you maybe 
+want to set the content type you're sending to application.json, which you don't need to, 
+that's the default anyways, just to show this....
+
+
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+
+So now if you do this, if you go back to the application and you inspect the requset which was sent, you
+will see that under headers, we've got the Authorization : AUTH TOKEN and for a post request here, if we
+do that, you will see that there if we inspect the request configuraiton we got the Authorization header
+and Content-Type : "application/json". 
+
+<Creating and Using Axios instances>
+
+What if you actually don't want to use the same baseURL for your entire application but only for parts of it ..
+and the same of course for the headers and so on. 
+In such a case, you can do a half measure by creating a cool feature porvided by axios which is called instances. 
+
+1. create 'axios.js' file in the src folder (on the same level as the index.js file)
+
+* on axios, we can execute a special create function or method to be precise. 
+
+2. const variable = aixos.create({ baseURL : '~~'});
+
+*axios.create creates an instance of axios, like a copy of the axios object you could say and you can create 
+multiple such copies. 
+
+Done!
+
+-> Now by deafult, the instance here will also assume the default set up here but overwrite anything which 
+it sets up in the instance itself. 
+
+(ex: for the headers, you can replace axios.defaults.headers(index.js) with instance.defaults.headers.common and so on..
+-> you could also create multiple instances in different files for different parts of your application. 
+
+3. import axios from 'axios' 대신 axios.js파일로부터 만든 컴포넌트를 import 한다. 

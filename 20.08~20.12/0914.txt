@@ -1,0 +1,25 @@
+-배운것-
+*input과form 의 onSubmit, onChange(value값 변경) 다루는 법 : 
+
+-form의 onSubmit 에 e.preventDefault()를 추가하면 post 설정 안해도 된다. 왜인지는 모르겠으나...
+-onChange 에서 input의 value 가 변하기 떄문에 value를 state로 지정한다.
+
+*useRef의 원리 
+
+const value = useRef(0)
+
+--> {current:0} 을 return 한다. 
+
+--> 바꿀 때 current.value로 접근해서 수정
+
+
+*input의 value값을 데이터로 넘길 땐 따로 value 속성 넣어주지말고 
+onChange했을 때의 e.target.value를 useRef로 받아서 넘겨주기. 
+(value속성 따로 넣어서 그 value를 받으려고 하면 리렌더링도 못잡고 넘겨주는것도 복잡하게된다...)
+
+*contextAPI
+
+
+
+
+

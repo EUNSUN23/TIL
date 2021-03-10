@@ -1,0 +1,39 @@
+-배운것-
+
+1. CORS(Cross-Origin Resource Sharing : 교차리소스공유) : 
+교차 출처 리소스 공유(Cross-Origin Resource Sharing, CORS)는 추가 HTTP 헤더를 사용하여, 
+한 출처에서 실행 중인 웹 애플리케이션이 다른 출처의 선택한 자원에 접근할 수 있는 권한을 부여하도록 
+브라우저에 알려주는 체제입니다. 웹 애플리케이션은 리소스가 자신의 출처(도메인, 프로토콜, 포트)와 다를 때 
+교차 출처 HTTP 요청을 실행합니다.
+
+(* 교차 출처 요청의 예시: 
+https://domain-a.com의 프론트 엔드 JavaScript 코드가 XMLHttpRequest를 사용하여 
+https://domain-b.com/data.json을 요청하는 경우.)
+
+해결 : 
+
+*package.json 수정해서 해결하는 방법
+
+pacakge.json> private 밑에 "proxy": "api주소('/마지막경로' 제외)  
+
+
+* http-proxy-middleware 라이브러리 다운로드 
+
+1. 설치
+ npm install --save-dev http-proxy-middleware
+
+2. src > setupProxy.js 파일 생성 
+------------------------------------------------------------------
+const proxy = require("http-proxy-middleware");
+
+module.exports = function (app) {
+  app.use(
+    proxy("/listitem", {
+      target: "https://mytodolist-5e3d4.firebaseio.com",
+      changeOrigin: true,
+    })
+  );
+};
+-------------------------------------------------------------------
+
+* 

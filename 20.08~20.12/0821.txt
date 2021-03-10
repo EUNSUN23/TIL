@@ -1,0 +1,27 @@
+-배운것-
+
+*로컬스토리지
+
+서버사이드 없이 동작하는, 자바스크립트와 웹브라우저 내부의 데이터 저장소(?). 사용하기 쉽고 단순함.
+프로토콜(?)임. (window.)localStorage로 접근가능. (읽기전용임)
+ --> 객체임. 
+
+같은 도메인에 있는 정보저장(?)
+
+로컬스토리지에는 자바스크립트의 데이터를 저장할 수 없다. 문자열(string)만 저장가능.
+자바스크립트 object를 문자열로 바꾸기 -> JSON.stringify();
+문자열을 자바스크립트가 이해할 수 있도록 object로 바꾸기 -> JSON.parse();
+*태그에 id 붙이기 : 태그.id = ~ ;
+
+JSON : Javascript Object Notation 
+- 데이터를 전달할 때, 자바스크립트가 그걸 다룰 수 있도록 object로 바꿔주는 기능.  string을 object로, object를 string으로.
+
+태그 정보를 알고싶으면 console.dir. 부모, 자식 다 볼 수 있음.
+e.currentTarget.parentNode.id 하면 parentNode의 id 볼 수 잇음.
+
+*비교문에서 원하는 값이 안나오면 비교한 두 값 타입이 동일한지 확인하기. (숫자-문자 비교하지 않도록)
+
+-질문-
+
+1. html에 이미 그려진 tag에다가, 자바스크립트로 create한 element를 appendChild 할 수 없는 이유는?
+(해당 element가 node가 아니라고 뜸)

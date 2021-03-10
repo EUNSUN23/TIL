@@ -1,0 +1,91 @@
+-배운것- 
+
+
+제로초 리액트 5-6 ~ 6-5(5:04까지)  // 내용 : 로또추첨기 class& hooks로 만들기 // 에러 : npm start 하는데 out of memory 뜸. 
+
+1. useEffect 
+useEffect 동작 원리 : 함수컴포넌트의 특성상 한번 렌더링하면 전체 함수가 다시 실행된다. 자식컴포넌트가 있을 경우, 자식 컴포넌트도 다시 실행한다(useMemo쓰는 이유 : 부모를 한번 감싸준다.)
+
+두번째 인자로 받는 변경되는 값이 무엇이냐에 따라 렌더링이 지나치게 많아질수도 있으므로 
+useEffect 작성시 console.log 끼워두고 렌더링이 쓸데없이 많이 되지는 않는지 살펴봐야한다. 배열에는 꼭 관련된 필요한 state만 쓰기.
+
+
+ useEffect(() => {
+    interval.current = setInterval(changeHand, 100); //componentDidMount, componentDidupdate 역할(1대1 대응은 아님.)
+    return () => {
+      //componentWillUnmount 역할
+      clearInterval(interval.current);
+    };
+  }, [imgCoord]);  --> setInteval에 의해서 가위바위보가 계속 바뀌는데, 이에 따라imgCoord가 바뀔때마다 setInterval이 새로 실행된다.
+		(1초에 한번씩 실행되는 setInterval 세트가 계속 추가됨). 따라서 setInterval이 실행될떄마다 clearInterval로
+		지워줘야 한다.
+
+
+///꼭 setInterval 같은 처리를 useEffect나 componentDidMount 안에서만 해야하는 것은 아님. 
+changeHand 같은 함수 안에서 해도 되지만 어떤 상황이든 componentWillUnmount로 정리하는 것은 필수. 
+
+2. 클래스와 hooks 라이프사이클 비교
+
+(class)
+componentDidMount , componentDidUpdate에서 모든 state를 조건문으로 분기처리함
+
+(hooks)
+state에 따라 다른 useEffect를 여러번 사용할 수 있음. 
+
+3. 기타 tip 
+
+*데이터보다는 화면 역할만 하는 자식 컴포넌트는 purecomponent로 보통 묶어준다. 
+혹은 state를 아예 안쓴다면 함수형 컴포넌트 + memo(컴포넌트를 또 다른 컴포넌트로 묶는 것을 hight-order-component(hoc)라고 한다.)
+
+*자식 컴포넌트 안에 setTimeout 등을 쓸 경우, 부모컴포넌트가 자식 컴포넌트를 없앨 때 setTimeout도 clear해줘야 한다.
+clear 안 하면 메모리 문제가 생기고, setTimeout안의 함수가 실행되면서 에러가 발생할 수 있다.
+
+*componentWillMount, componentWillReceiveProps, componentWillUpdate 등은 지금껏 많이 쓰였지만 이제는 사라질 것들.
+(렌더링 전에 발생함)
+
+*//let을 쓰면 비동기 안에 변수선언을 해도 클로져문제가 생기지 않는다.
+
+
+4. componentDidUpdate
+: 업데이트하고 싶은 상황 처리. componentDidUpdate에서는 조건문이 중요하다.  
+이 조건문이 없으면 STATE가 바뀔때마다 componentDidUpdate가 실행되기때문에.
+(vs componentDidMount : comDM는 첫 렌더링 때만 실행되고, 그 후 리렌더링때는 실행되지 않는다. 반면 componentDidUpdate는 
+특정 조건이 성립될때마다 실행됨.
+
+
+5. useEffect로 업데이트 감지하기(****)
+
+
+6. 깃허브 원격 저장소 로컬에 연결하기(원격 branch는 default로 하나 만들어지는듯)
+git remote add reactpr  https://github.com/EUNSUN23/React_pr.git ---> add다음이 원격 이름. git push reactpr master 이런식으로.
+[출처] 깃허브(github) - 원격 저장소 만들기|작성자 GayaChoi
+
+7. componentDidMount, componentDidUpdate, componentWillUnmount 를 useEffect로 바꾸기
+
+useEffect(()=> {}, []); 에서 두번째 인자인 배열이 빈값이면 componentDidMount와 동일하다(첫 렌더링 이후에만 실행됨)
+				 배열이 빈값이 아니면 componentDidMount와 componentDidUpdate 둘 다 수행.
+				return 부분이 componentWillUnmount.
+
+
+8. 성능문제 ) 
+
+함수컴포넌트에서는 렌더링이 일어날때마다 전체가 다 실행된다. 그래서 메모리 용량 잡아먹게된다.
+
+ex) const [winNumbers, setWinNumbers] = useState(getWinNumbers());  
+
+---> winNumbers에 값을 저장하려는 용도일 뿐인데, 렌더링 될 때마다 getWinNumbers가 실행됨. 
+해결법 : useMemo사용해서, 매번 getWinNumbers 실행하게 하지 않고도 winNumbers 값을 저장해두기. (새로고침 안되게하기?..)
+
+(ex)
+ const lottoNumbers = useMemo(()=>getWinNumbers(), []); 
+//배열에 들어가는 인자가 바뀌지 않는한 다시 get~함수가 다시 실행되지 않음.
+
+
+* useRef : 일반 값을 기억
+  useMemo : 복잡한 함수값을 기억
+
+
+
+-학습결과서 쓰기
+-알고리즘 풀이 마저 끝내기(가장 큰 수) & 옷입는문제 풀기
+

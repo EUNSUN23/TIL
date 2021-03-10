@@ -1,0 +1,6 @@
+기타 TIL
+
+ConnectedReactRouter base url 설정 : 보통 BrowserRouter의 baseurl props로 주지만, connected react router는
+history의 속성으로 준다. 
+
+export const history = createBrowserHistory({ basename: "/" });
