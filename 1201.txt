@@ -1,0 +1,19 @@
+-배운것-
+
+*connected-react-router
+
+The connected-react-router library provides Redux bindings for React Router; for example, 
+the application's history can be read from a Redux store and you can navigate to different routes 
+in the application by dispatching actions to the store.
+
+react-router-dom의 history.push와
+
+connected-react-router의 push는 어떤 차이때문에 쓰시는 건지 알 수 있을까요?
+
+단순히 페이지 이동이라면 history.push면 될텐데 그게 아닌 것 같아서요.
+단방향의 흐롬(history -> store -> router -> components)을 통해 라우터 상태를 리덕스 스토어와 일치를 시켜줍니다. 
+
+단순히 history.push를 쓸 경우 마우스의 뒤로가기 버튼을 사용하거나 할때 혹은 비정상적으로 왔다갈다할때 가끔 오류가 발생하여(항상 발생하는 것은 아니고 정말 가끔), 
+안정화시켜주기 위해 connected-react-router를 사용합니다. 
+
+-질문-

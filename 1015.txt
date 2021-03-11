@@ -1,0 +1,115 @@
+-배운것-
+<Mission 1.>
+
+-그룹 input만들기-
+
+
+1. 정규표현식 기초 (영+숫+특 하기위해)
+
+*Regular Expressions (Regex) Tutorial: How to Match Any Pattern of Text 영상참고
+
+Regualr Expressions basically allows us to search for specific patterns of text.
+(영상에서는 txt파일 만들고 atom으로 실행, 아톰의 find in buffer 의 regex serach tool 이용해서
+예시 보여줌)
+
+- anchor :
+
+역슬래시b : word boundary.   역bHa -->  Ha HaHa 중 첫번째, 두번째 Ha만 match됨(Ha 앞에 바운더리가 있기 떄문에)
+역슬래시B : Not a word boundeary. 역BHa --> 세번째 Ha만 해당(바운더리 없으므로)
+				역bHa역b --> 첫번째 Ha 만 match
+^ : beginning of a string. ^Ha --> 첫번째 Ha만 해당(string 라인의 시작이므로)
+$ : end of a string. $Ha --> 맨 마지막 Ha만. 
+. : any charactor
+
+1) 321-555-4321
+2) 123.555.1234
+3) 123*555*1234
+4) 800-555-4321
+5) 900-555-4321
+
+\d\d\d.\d\d\d.\d\d\d\d
+
+--> 1~5번 match
+
+\d\d\d[-.]\d\d\d[-.]\d\d\d\d
+-->1번,2번 match.
+
+ 위 전화번호 중 - 혹은 . 가 포함된 것을 찾는다. -와 . 둘다 포함된 것을 찾는게 아님. - 혹은 . 하나만 포함된 것을
+찾음. 
+
+[89]00[-.]\d\d\d[-.]\d\d\d\d
+
+--> 4,5번 match
+(\:역슬래시로 치자)
+
+
+[]는 value의 중간에 있을 때 range를 뜻한다. 
+
+[1-7] : 1부터 7까지의 숫자 찾기
+[a-zA-Z] : 알파벳(대소문자)찾기
+[^a-z] : 알파벳 소문자가 아닌것 찾기
+
+
+cat
+mat
+pat
+bat
+
+[^b]at : b가 아닌것+ at 찾기 --> pat,mat,cat
+ 
+*,+,?,{3},{3,4} --> quantifiers (책 참고)
+
+{3} : exact number
+
+\d{3}.\d{3}.\d{4} ---> 1,2,3,4,5번 match
+
+? : 0 or more
+
+1) Mr. Schafer
+2) Mr Smith
+3) Ms Davis
+4) Mrs. Robinson
+5) Mr. T
+
+Mr\.? 
+--> Mr + charactor가 없거나 1개있거나 --> 1,2,4,5 match
+
+Mr\.?\s[A-Z] 
+--> Mr + charactor 없거나 1개있거나 + 띄어쓰기(여백) + 알파벳대문자 --> 1,2,5번 match
+
+Mr\.?\s[A-Z]\w+ 
+--> Mr + charactor 없거나있거나 + 띄어쓰기(여백) + 알파벳대문자 + 1개이상의 word charactor --> 1,2번
+
+Mr\.?\s[A-Z]\w*
+ --> Mr + charactor 없거나있거나 + 띄어쓰기(여백) + 알파벳대문자 + 0개 이상의 word charactor --> 1,2,5번
+
+
+<group>
+
+groups allow us to match several different ptterns and to create a group we use parentheses 
+
+M(r|s|rs)\.?\s[A-Z]\w* ---> 1~5 match
+
+2. html5의 input pattern속성
+
+: 정규표현식 이용해서 input의 패턴을 설정할 수 있다.
+
+<input type ="text" id="id" name = "id" pattern = "[A-Za-z\d\.]{6,10}" 
+
+
+
+******정규표현식으로 영문 + 특수문자 + 숫자  값 validation 하는법
+
+<순서에 상관없이 영,특,숫자 하나씩 들어가고 value length가 10글자 넘는것>
+
+(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&*])[.a-zA-Z0-9@#$%^&]{10,}  
+
+- (?= ) : =뒤의 무언가가 적어도 한개는 있어야 한다 
+- (?=.*) : =뒤에 (0개포함해 그 이상인) '.' 가 한개는 있어야 한다(0개, 즉 null값이든 실제값이든)
+- (?=.*[a-z]) : 어떤 문자가 앞에 올수도 있고 안올수도 있는데 그뒤에 a-z까지 중 한 문자가 있는 뭉치(?)가 하나는
+있어야 한다. 
+
+
+
+
+-질문-

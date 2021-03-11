@@ -1,0 +1,95 @@
+-배운것-
+
+1. 라이프 사이클 사용해서 컴포넌트 렌더링되는 타이밍 파악하는 법:
+
+(class) 
+
+componentDidUpdate(){
+	console.log(~~); 
+}
+
+--> 해당컴포넌트가 렌더링 되는 시점마다 console.log 찍기. 
+
+
+2. shouldComponentUpdate & React.useMemo 
+
+--> React.useMemo 는 함수형 컴포넌트 export 할때 감싸주기. 
+
+
+3. the wrapping element controls the updating of the wrapped element.
+
+4. 언제 lifecycle method를 쓰는지?
+
+: when reaching out to a web service and fetching  data from there. (http통신 할 때 등)
+로그인 넣을때 주로 쓴다. 
+
+5. container: something contains components and pass props down to them. 
+
+6.
+<HTTP/Ajax>
+
+spa 만들 때에는 서버와 html 페이지를 주고받는것이 아니라, json데이터를 주고받는다.
+따라서 주로 서버는 RESTful API임. 
+
+*jsonplaceholder : 가상으로 json데이터를 주고 받는것 체험할 수 있는 가상의 RESTful API. 
+(특정 url로 어떤 요청 보내면 거기 저장되어있는 dummydata를 자바스크립트 코드로 받을 수 있음)
+
+*Ajax 통신 하는 법 : 
+
+1) XMLHttpRequest
+
+-자바스크립트 object. 
+-Ajax request를 construct하고 특정 url에 보내고 그에 대한 response를 handle할 수있음. 
+-manually 하게 사용하는게 cumbersome 함. 
+
+2) Axios
+
+Axios란? : a third-party javascript library . 자바스크립트 package임. (어떤 자바스크립트 패키지에도 사용 가능.
+react와 특별한 연계없음.)
+ 
+설치 : development서버에서 빠져나와서(ctrl c), npm install axios --save 
+
+사용법 :
+
+*** http request 는 side-effect이다. (react logic에 아무 영향도 주지 않고, 새로운 데이터를 fetching하는 역할만 한다.
+
+그냥 맨 처음 렌더할 때 실행되는것.)  componentDidMount
+re-render가 일어나기 때문에 보통의 state를 업데이트하는 곳으로는 원래 적절치 않으나, 
+새로운 데이터를 fetch 해서 reupdate the page 하기에는 좋다. 
+
+<ex>
+
+import axios from "axios";
+
+class Blog extends Component {
+  componentDidMount() {
+    axios.get("https://jsonplaceholder.typicode.com/posts"); 
+  }
+  render() { ~~ } 
+
+get 말고도 다른 send 방법 : axios 깃허브(즐겨찾기) 참고. 
+
+동작 : 비동기적으로 data를 서버에서 get 해온다.  변수에 할당한다고 해서 바로 저장되지 않기 때문에, 
+promise를 사용한다. (es6에 처음 소개된 자바스크립트 object) // promise를 return함. 
+
+.then() : 함수를 input으로 받아서 promise가 resolve 될 때 그 함수를 실행한다. (여기서는 서버 부터 받은 
+특정 데이터가 존재할 때. get한 그 데이터가 존재할때). 
+이 함수는 받은 데이터를 인자로 받아서 화면에 출력하든지, 뭘하든지 할 수 있게끔 한다. 
+
+<ex> 
+
+componentDidMount() {
+    axios.get("https://jsonplaceholder.typicode.com/posts").then((response) => {
+      console.log(response);  
+    });
+  }
+
+--> 콘솔창에 request 보낸 서버로부터 받은 데이터 정보가 뜬다. (request 보낸 곳, 데이터정보, request 보낸 방식..)
+
+7. 서버로부터 받은 데이터 transform 하기. (실제 app에서라면 데이터에 query param을 보내서 get하는 데이터 양을
+조절 할 수 있음)
+
+--> 받은데이터를 slice(); 해서 자바스크립트 코드로 따로 편집할 수 있음. 
+
+
+

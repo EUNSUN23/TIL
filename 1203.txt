@@ -1,0 +1,13 @@
+-배운것-
+
+
+<redux관련> 
+Error: You may not call store.getState() while the reducer is executing. 
+The reducer has already received the state as an argument. 
+Pass it down from the top reducer instead of reading it from the store.
+
+동시에 두개의 mapStateProps를 돌릴수는 없음. 
+
+<state초기화>
+
+부모의 props 를 통해서 state초기화시켜줄 수 있음. 

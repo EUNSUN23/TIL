@@ -1,0 +1,30 @@
+-배운것-
+
+
+-질문- 
+
+const state = {
+    textInput: {
+      id: {
+        name: "id",
+        valueType: "text",
+        title: "",
+        value: "",
+        pattern: "",
+      },
+  }
+}
+
+
+const inputArr = [];
+
+for(let key in state.textInput){
+  inputArr.push({
+    value: state.textInput.key.value,
+  })
+}
+
+console.log(inputArr);
+
+
+--> 왜 push안에서는 state객체안의 value에 접근하지 못하는지? (key가 변수인 상태라 value를 아직 못찾아서?...) 

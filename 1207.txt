@@ -1,0 +1,15 @@
+-배운것-
+
+<Authetication>
+
+1. 로그인, 회원가입 시 form의 value post하는 주소가 달라짐. 회원가입시 token을 response의
+데이터 객체 안에 받는데, 회원가입 post 하면 이 토큰이 일치하는지 서버쪽에서 검사하고, 그에따른
+response를 받는다. (+에러메세지)
+
+2. 토큰으로 백엔드의 protected resource에 접근하는 request 보내기
+
+firebase같은 경우 초기 접근 설정을 바꿔주면 된다. 
+
+(수기 : realtimedatabase > rule 수정 : read, write 말고도 다른 rule 추가할 수 있음) 
+
+3. 로그인 state persists하기. 

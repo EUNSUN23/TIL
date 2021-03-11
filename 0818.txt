@@ -1,0 +1,35 @@
+-배운것-
+
+
+*자바스크립트 기초문제 n.18~24
+
+do/while문 -> 조건이전에 무조건 do를 실행하고 시작한다.
+
+arguments -> 함수내부에서 함수의 parameter를 배열로 받는 객체.
+
+
+function add1() { return a+b }
+ 
+
+vs
+
+var add2 = function(){ return a+b}
+
+컴파일단계
+1. 전역변수, 전역함수를 메모리에 생성함. 
+전역함수 - add1  -> 내부가 생성자(constructor)와 프로토타입이라는 별도의 메모리공간이 있음. (undefined로 초기화되지 않음)
+전역변수 - add2  -> undefined로 초기화됨.
+
+setTimeout, setInterval 은 윈도우가 가지고 있는 내장객체임. 
+
+switch 문 : 조건이 하나의 변수 값을 대상으로 할 때 씀. 
+case: 
+break; 로 이뤄져있고, default : ~ break;가 if조건문에서의 else역할을 한다. 
+break유무에 따라 동작이달라진다. break가 없으면 switch문을 빠져나오지 않고 계속 돈다.
+
+
+-질문-
+
+(해결해야하는것)
+
+-2048게임에서 왜 새데이터에 행데이터를 추가할때 오/왼 혹은 위/아래에 따라서 push, unshift를 하게되는지.
