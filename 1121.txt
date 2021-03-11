@@ -1,2 +1,0 @@
-redux.js.org > recipes > immutable update patterns 
-

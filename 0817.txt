@@ -1,9 +1,0 @@
--배운것-
-
-*자바스크립트 
-
-
--질문-
-push vs unshift
-
-document.createDocumentFragment();
